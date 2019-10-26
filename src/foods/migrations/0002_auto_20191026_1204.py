@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='food',
             name='description',
-            field=models.TextField(default=b'', null=True),
+            field=models.TextField(default=b'Description will be placed here', null=True),
         ),
         migrations.AddField(
             model_name='food',
