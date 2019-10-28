@@ -18,6 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^detail/$', 'foods.views.detail_view', name="detail_view"),
+    url(r'^detail/(?P<object_id>\d+)/$', 'foods.views.detail_view', name="detail_view"),
     url(r'^list/$', 'foods.views.list_view', name="list_view"),
 ]

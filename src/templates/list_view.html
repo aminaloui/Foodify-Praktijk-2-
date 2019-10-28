@@ -1,6 +1,14 @@
-{% extends "base.html" %}
+ {% extends "base.html" %}
 
+{% block style %}
+  h1{
+    color: green;
+ }
+ {% endblock style %}
 
 {% block content %}
-<h1>List view </h1>
+<h1>list  view: </h1>
+  {{allfoods}}
+ {{block.super }}
 {% endblock content %}
+
