@@ -16,8 +16,20 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from foods.views import (
+        FoodListView,
+        FoodDetailView,
+)
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^detail/(?P<object_id>\d+)/$', 'foods.views.detail_view', name="detail_view"),
-    url(r'^list/$', 'foods.views.list_view', name="list_view"),
+    url(r'^create/$', 'foods.views.create_view', name='create_view'),
+    url(r'^detail/(?P<object_id>\d+)/$', 'foods.views.detail_view', name='detail_view'),
+    url(r'^detail/(?P<object_id>\d+)/edit/$', 'foods.views.update_view', name='update_view'),
+    url(r'^detail/(?P<slug>[\w-]+)/$', 'foods.views.detail_slug_view', name='detail_slug_ view'),
+    url(r'^list/$', 'foods.views.list_view', name='list_view'),
+    url(r'^foods/$', FoodListView.as_view(), name='foods_list_view'),
+    url(r'^foods/(?P<slug>[\w-]+)/$', FoodDetailView.as_view(), name='foods_detail_slug_view'),
+    url(r'^foods/(?P<pk>\d+)/$', FoodDetailView.as_view(), name='foods_detail_view'),
+
 ]
