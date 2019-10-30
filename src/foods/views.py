@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, get_object_or_404
@@ -51,7 +51,6 @@ class FoodUpdateView(UpdateView):
 
 # Mixins
 
-
 class LoginRequiredMixin(object):
 
     @method_decorator(login_required)
@@ -86,8 +85,11 @@ class FoodListView(ListView):
     model = Food
 
     def get_queryset(self, *args, **kwargs):
-        queryset = super(FoodListView, self).get_queryset(**kwargs)
-        return queryset
+        qs = super(FoodListView, self).get_queryset(**kwargs)
+        query = self.request.GET.get("q")
+        if query:
+            qs = qs.filter(Q(title__icontains=query) | Q(description__icontains=query)).order_by("title")
+        return qs
 
 
 def create_view(request):

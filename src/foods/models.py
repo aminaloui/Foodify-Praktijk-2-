@@ -2,13 +2,17 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_save, post_save
-
-# Create your models here.
 from django.utils.text import slugify
+
+
+def download_media_location(instance, filename):
+
+    return "%s/%s" %(instance.id, filename)
 
 
 class Food(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    media = models.FileField(blank=True, null=True, upload_to="download_media_location")
     title = models.CharField(max_length=20)
     slug = models.SlugField(blank=True, unique=True)
     description = models.TextField(null=True, default="")
@@ -20,7 +24,6 @@ class Food(models.Model):
     def get_absolute_url(self):
         view_name = "food_detail_slug_view"
         return reverse(view_name, kwargs={"slug": self.slug})
-
 
 
 def create_slug(instance, new_slug=None):
