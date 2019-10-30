@@ -13,13 +13,18 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+from django.conf import settings
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from django.contrib import admin
 
+
 from foods.views import (
-        FoodListView,
-        FoodDetailView,
-)
+        FoodCreateView,
+        FoodDetailView, FoodListView,
+        FoodUpdateView
+        )
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -29,7 +34,13 @@ urlpatterns = [
     url(r'^detail/(?P<slug>[\w-]+)/$', 'foods.views.detail_slug_view', name='detail_slug_ view'),
     url(r'^list/$', 'foods.views.list_view', name='list_view'),
     url(r'^foods/$', FoodListView.as_view(), name='foods_list_view'),
-    url(r'^foods/(?P<slug>[\w-]+)/$', FoodDetailView.as_view(), name='foods_detail_slug_view'),
-    url(r'^foods/(?P<pk>\d+)/$', FoodDetailView.as_view(), name='foods_detail_view'),
+    url(r'^foods/add/$', FoodCreateView.as_view(), name='food_create_view'),
+    url(r'^foods/(?P<pk>\d+)/$', FoodDetailView.as_view(), name='food_detail_view'),
+    url(r'^foods/(?P<slug>[\w-]+)/$', FoodDetailView.as_view(), name='food_detail_slug_view'),
+    url(r'^foods/(?P<pk>\d+)/edit/$', FoodUpdateView.as_view(), name='food_update_view'),
+    url(r'^foods/(?P<slug>[\w-]+)/edit/$', FoodUpdateView.as_view(), name='food_update_view'),
 
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

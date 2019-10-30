@@ -1,8 +1,62 @@
+from django.http import Http404
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.shortcuts import render, get_object_or_404
-from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.list import ListView
 from .forms import FoodAddForm, FoodModelForm
 from .models import Food
+
+
+class FoodCreateView(CreateView):
+    model = Food
+    template_name = "form.html"
+    form_class = FoodModelForm
+    # success_url = "/foods/"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(FoodCreateView, self).get_context_data(*args, **kwargs)
+        context["submit_btn"] = "Voeg product toe"
+        return context
+
+    def form_valid(self, form):
+        user = self.request.user
+        # Voegt product to aan current user
+        form.instance.user = user
+        valid_data = super(FoodCreateView, self).form_valid(form)
+        return valid_data
+
+
+class FoodUpdateView(UpdateView):
+    model = Food
+    template_name = "form.html"
+    form_class = FoodModelForm
+    success_url = "/foods/"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(FoodUpdateView, self).get_context_data(*args, **kwargs)
+        context["submit_btn"] = "Voeg product toe"
+        return context
+
+    def get_object(self, *args, **kwargs):
+        user = self.request.user
+        obj = super(FoodUpdateView, self).get_object(*args, **kwargs)
+        if obj.user == user:
+            return obj
+        else:
+            raise Http404
+
+
+# Mixins
+
+
+class LoginRequiredMixin(object):
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
 class MultiSlugMixin(object):
@@ -21,30 +75,19 @@ class MultiSlugMixin(object):
         return obj
 
 
+#
+
+
+class FoodDetailView(MultiSlugMixin, DetailView):
+    model = Food
+
+
 class FoodListView(ListView):
     model = Food
 
     def get_queryset(self, *args, **kwargs):
         queryset = super(FoodListView, self).get_queryset(**kwargs)
-        # queryset = queryset.filter(title__icontains="Food")
         return queryset
-
-
-class FoodDetailView(MultiSlugMixin,DetailView):
-    model = Food
-
-    # def get_object(self, *args, **kwargs):
-    #     # print self.kwarg
-    #     slug = self.kwargs.get("slug")
-    #     modelClass = self.model
-    #     if slug is not None:
-    #         try:
-    #             obj = get_object_or_404(Food, slug=slug)
-    #         except modelClass.MultipleObjectsReturned:
-    #             obj = modelClass.objects.filter(slug=slug).order_by("-title").first()
-    #     else:
-    #         obj = super(FoodDetailView, *args, **kwargs)
-    #     return obj
 
 
 def create_view(request):

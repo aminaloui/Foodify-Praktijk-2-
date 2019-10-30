@@ -1,5 +1,7 @@
 from django import forms
+from django.utils.text import slugify
 from .models import Food
+
 
 
 class FoodAddForm(forms.Form):
@@ -51,6 +53,15 @@ class FoodModelForm(forms.ModelForm):
             )
         }
 
+        # def clean(self, *args, **kwargs):
+        #     cleaned_data = super(FoodModelForm, *args, **kwargs)
+        #     title = cleaned_data.get("title")
+        #     slug = slugify(title)
+        #     qs = Food.objects.filter(slug="slug").exists()
+        #     if qs:
+        #         raise forms.ValidationError("Deze titel is al ingebruik. Kies aub een nieuwe titel.")
+        #     return cleaned_data
+
         def clean_price(self):
             price = self.cleaned_data.get("price")
             if price <= 1.00:
@@ -65,4 +76,4 @@ class FoodModelForm(forms.ModelForm):
             if len(title) > 3:
                 return title
             else:
-                raise forms.ValidationError("Title moet minimaal 3 karakters bevatten")
+                raise forms.ValidationError("Titel moet minimaal 3 karakters bevatten")
