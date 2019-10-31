@@ -5,8 +5,21 @@
 {% block content %}
 
 <h1>Food: {{food.title}}</h1>
+
 <p>{{ food.description }}</p>
 <p>{{ food.price }}</p>
+
+{% for img in object.thumbnail_set.all %}
+<img src="{{ img.media.url }}" />
+
+{% endfor %}
+
+{% if request.user.is_authenticated and object.media and object in request.user.myproducts.products.all %}
+
+
+
+
+{% endif %}
 
 {% endblock content %}
 

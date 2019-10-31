@@ -6,8 +6,7 @@ from django.utils.text import slugify
 
 
 def download_media_location(instance, filename):
-
-    return "%s/%s" %(instance.id, filename)
+    return "%s/%s" % (instance.slug, filename)
 
 
 class Food(models.Model):
@@ -45,9 +44,22 @@ def food_pre_save_reciever(sender, instance, *args, **kwargs):
 
 pre_save.connect(food_pre_save_reciever, sender=Food)
 
-# def food_post_save_reciever(sender, instance, *args, **kwargs):
-#     if instance.slug != slugify(instance.title):
-#         instance.slug = slugify(instance.title)
-#         instance.save()
-#
-# post_save.connect (food_post_save_reciever, sender=Food)
+
+def thumbnail_location(instance, filename):
+    return "%s/%s" % (instance.product.slug, filename)
+
+
+class Thumbnail(models.Model):
+    product = models.ForeignKey(Food)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    height = models.CharField(max_length=20, null=True, blank=True)
+    width = models.CharField(max_length=20, null=True, blank=True)
+    media = models.ImageField(
+        width_field="width",
+        height_field="height",
+        blank=True,
+        null=True,
+        upload_to=thumbnail_location)
+
+    def __unicode__(self):  # __str__(self):
+        return str(self.media.path)
