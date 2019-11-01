@@ -11,7 +11,7 @@ from foods.models import Food
 class Tag(models.Model):
     title = models.CharField(max_length=120, unique=True)
     slug = models.SlugField(unique=True)
-    foodProducts = models.ManyToManyField(Food, blank=True)
+    foods = models.ManyToManyField(Food, blank=True)
     active = models.BooleanField(default=True)
 
     def __unicode__(self):

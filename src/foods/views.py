@@ -12,6 +12,8 @@ from .models import Food
 
 from foodify.mixins import MultiSlugMixin, LoginRequiredMixin
 
+from tags.models import Tag
+
 
 class FoodCreateView(CreateView, MultiSlugMixin, LoginRequiredMixin):
     model = Food
@@ -38,46 +40,23 @@ class FoodUpdateView(UpdateView, MultiSlugMixin,):
     form_class = FoodModelForm
     success_url = "/foods/"
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(FoodUpdateView, self).get_context_data(*args, **kwargs)
-        context["submit_btn"] = "Voeg product toe"
-        return context
+    def get_initial(self):
+        initial = super(FoodUpdateView, self).get_initial()
+        initial["tags"] = ""
+        return initial
 
-    def get_object(self, *args, **kwargs):
-        user = self.request.user
-        obj = super(FoodUpdateView, self).get_object(*args, **kwargs)
-        if obj.user == user:
-            return obj
-        else:
-            raise Http404
-
-#
-# # Mixins
-#
-# class LoginRequiredMixin(object):
-#
-#     @method_decorator(login_required)
-#     def dispatch(self, request, *args, **kwargs):
-#         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
-#
-#
-# class MultiSlugMixin(object):
-#     model = None
-#
-#     def get_object(self, *args, **kwargs):
-#         slug = self.kwargs.get("slug")
-#         modelClass = self.model
-#         if slug is not None:
-#             try:
-#                 obj = get_object_or_404(Food, slug=slug)
-#             except modelClass.MultipleObjectsReturned:
-#                 obj = modelClass.objects.filter(slug=slug).order_by("-title").first()
-#         else:
-#             obj = super(MultiSlugMixin, *args, **kwargs)
-#         return obj
-#
-#
-# #
+    def form_valid(self, form):
+        valid_data = super(FoodUpdateView, self).form_valid(form)
+        tags = form.cleaned_data.get("tags")
+        obj = self.get_object()
+        obj.tag_set.clear()
+        if tags:
+            tags_list = tags.split(",")
+            for tag in tags_list:
+                new_tag = Tag.objects.get_or_create(title=str(tag).strip())[0]
+                #voegt tag toe aan eten dat geupdate wordt
+                new_tag.foods.add(self.get_object())
+        return valid_data
 
 
 class FoodDetailView(MultiSlugMixin, DetailView):

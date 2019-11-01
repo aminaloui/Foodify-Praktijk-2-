@@ -30,9 +30,10 @@ from tags.views import (
         TagDetailView
 
 )
-
+from dashboard.views import DashboardView
 
 urlpatterns = [
+    url(r'^$', DashboardView.as_view(), name='dashboard'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^create/$', 'foods.views.create_view', name='create_view'),
     url(r'^detail/(?P<object_id>\d+)/$', 'foods.views.detail_view', name='detail_view'),
@@ -46,8 +47,8 @@ urlpatterns = [
     url(r'^foods/(?P<pk>\d+)/edit/$', FoodUpdateView.as_view(), name='food_update_view'),
     url(r'^foods/(?P<slug>[\w-]+)/edit/$', FoodUpdateView.as_view(), name='food_update_view'),
 
-    url(r'^$', TagListView.as_view(), name='list'),
-    url(r'^(?P<slug>[\w-]+)/$', TagDetailView.as_view(), name='detail'),
+    url(r'^tags/', include("tags.urls", namespace='tags')),
+
 
 ]
 if settings.DEBUG:

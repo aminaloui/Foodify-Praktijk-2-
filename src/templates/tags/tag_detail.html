@@ -4,15 +4,14 @@
 
 {% block content %}
 
-
-
+<div>
+<!--Uit foods.models instance haalt hij alle tags door middel van een manytomany relatie field-->
 <ul>
-{% for foodProducts_instance in instance.foods.all %}
+{% for food_instance in object.foods.all %}
+
+    Gerelateerde maaltijden:
         <li>
-    	{{ food_instance }}
-    	{{ food_instance.thumbnail_set.all }}
-    	{{ food_instance.thumbnail_set.all.first }}
-    	{{ food_instance.thumbnail_set.all.first.media }}
+<!--            Onderstaande regel laat 1ste geuploade thumbnail zien van elk food object gerelateerd aan de tag-->
     	<a href='{{ food_instance.get_absolute_url }}'><img src='{{ food_instance.thumbnail_set.all.first.media.url }}'></a>
 
     </li>
@@ -22,7 +21,7 @@
     <li>Geen tags gevonden.</li>
 {% endfor %}
 </ul>
-
+</div>
 
 
 {% endblock content %}

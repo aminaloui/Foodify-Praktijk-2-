@@ -63,3 +63,4 @@ class Thumbnail(models.Model):
 
     def __unicode__(self):  # __str__(self):
         return str(self.media.path)
+

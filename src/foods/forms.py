@@ -3,7 +3,6 @@ from django.utils.text import slugify
 from .models import Food
 
 
-
 class FoodAddForm(forms.Form):
     title = forms.CharField(widget=forms.TextInput(
         attrs={
@@ -33,6 +32,8 @@ class FoodAddForm(forms.Form):
 
 
 class FoodModelForm(forms.ModelForm):
+    tags = forms.CharField(label="tags", required=False)
+
     class Meta:
         model = Food
         fields = [

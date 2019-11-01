@@ -9,12 +9,17 @@
 <!--</form>-->
 </p>
 <ul>
+    <p>
+        Met tags vind je alle maaltijden die aan elkaar zijn gerelateerd!
+    </p>
 {% for instance in object_list %}
-    <li><a href='{{ instance.get_absolute_url }}'>{{ instance.title }}</a> ({{ instance.foodProducts.count }} food{% if instance.foodProducts.count > 1 %}s{% endif %})</li>
+
+
+    <li class="list-group-item"><a href='{{ instance.get_absolute_url }}'>{{ instance.title }}</a> ({{ instance.foods.count }} food product{% if instance.foods.count > 1 %}en{% endif %})</li>
 
 
 {% empty %}
-    <li>Geen tags gevonden.</li>
+    <li>Geen Tags gevonden.</li>
 {% endfor %}
 </ul>
 {% endblock content %}

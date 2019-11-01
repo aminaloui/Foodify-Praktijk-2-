@@ -1,20 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Food Products</h1>
+<h1>Alle Maaltijden</h1>
 <p>
-<form method="GET" action="">
-    <input type="text" name="q" placeholder="Search" value="{{ request.GET.q }}">
-    <input type="submit" value="Search">
-</form>
+Hieronder bevinden zich alle maaltijden!
+    <form class="form-inline my-2 my-lg-0" method="GET" action="">
+      <input class="form-control mr-sm-2" type="search" name="q" value="{{ request.GET.q }}" placeholder="Zoek naar producten" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Zoek</button>
+    </form>
 </p>
-<ul>
+<ul class="list-group">
 {% for instance in object_list %}
-    <li><a href='{{ instance.get_absolute_url }}'>{{ instance.title }}</a>
-    	{{ instance.description|truncatechars:100 }}
-    	{{ instance.price }}</li>
+    <li class="list-group-item"><a href='{{ instance.get_absolute_url }}'>{{ instance.title }}</a>
+<!--    	{{ instance.description|truncatechars:100 }}-->
+<!--    	{{ instance.price }}</li>-->
 {% empty %}
     <li>Geen foodproducten gevonden.</li>
 {% endfor %}
 </ul>
 {% endblock content %}
+
+

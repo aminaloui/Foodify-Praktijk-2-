@@ -4,13 +4,14 @@
 
 {% block content %}
 
-<h1>Food: {{food.title}}</h1>
+<h1>{{food.title}}</h1>
 
 <p>{{ food.description }}</p>
-<p>{{ food.price }}</p>
+<p> Prijs:€{{ food.price }}</p>
 
 {% for img in object.thumbnail_set.all %}
-<img src="{{ img.media.url }}" />
+<img src="{{ img.media.url }}" class="img-thumbnail"/>
+
 
 {% endfor %}
 
@@ -21,5 +22,7 @@
 
 {% endif %}
 
+<p> Bestellen? <br> Bel het onderstaande nummer:</p>
+<p>06-23142432</p>
 {% endblock content %}
 

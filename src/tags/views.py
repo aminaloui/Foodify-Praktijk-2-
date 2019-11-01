@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
 from .models import Tag
@@ -12,7 +11,8 @@ class TagDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(TagDetailView, self).get_context_data(*args, **kwargs)
-        print self.get_object().foodProducts.all()
+        print self.get_object().foods.all()
+
         return context
 
 
