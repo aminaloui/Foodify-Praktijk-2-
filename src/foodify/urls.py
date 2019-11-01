@@ -25,6 +25,12 @@ from foods.views import (
         FoodUpdateView
         )
 
+from tags.views import (
+        TagListView,
+        TagDetailView
+
+)
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -39,6 +45,9 @@ urlpatterns = [
     url(r'^foods/(?P<slug>[\w-]+)/$', FoodDetailView.as_view(), name='food_detail_slug_view'),
     url(r'^foods/(?P<pk>\d+)/edit/$', FoodUpdateView.as_view(), name='food_update_view'),
     url(r'^foods/(?P<slug>[\w-]+)/edit/$', FoodUpdateView.as_view(), name='food_update_view'),
+
+    url(r'^$', TagListView.as_view(), name='list'),
+    url(r'^(?P<slug>[\w-]+)/$', TagDetailView.as_view(), name='detail'),
 
 ]
 if settings.DEBUG:

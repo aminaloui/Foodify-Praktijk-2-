@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+
+
+<ul>
+{% for foodProducts_instance in instance.foods.all %}
+        <li>
+    	{{ food_instance }}
+    	{{ food_instance.thumbnail_set.all }}
+    	{{ food_instance.thumbnail_set.all.first }}
+    	{{ food_instance.thumbnail_set.all.first.media }}
+    	<a href='{{ food_instance.get_absolute_url }}'><img src='{{ food_instance.thumbnail_set.all.first.media.url }}'></a>
+
+    </li>
+
+
+{% empty %}
+    <li>Geen tags gevonden.</li>
+{% endfor %}
+</ul>
+
+
+
+{% endblock content %}
+

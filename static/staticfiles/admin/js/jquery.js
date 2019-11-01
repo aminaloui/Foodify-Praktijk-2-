@@ -9617,7 +9617,7 @@ if ( xhrSupported ) {
 						id = ++xhrId;
 
 					// Open the socket
-					xhr.open( options.type, options.url, options.async, options.username, options.password );
+					xhr.open( options.type, options.urls, options.async, options.username, options.password );
 
 					// Apply custom fields if provided
 					if ( options.xhrFields ) {
@@ -9801,7 +9801,7 @@ jQuery.ajaxTransport( "script", function(s) {
 					script.charset = s.scriptCharset;
 				}
 
-				script.src = s.url;
+				script.src = s.urls;
 
 				// Attach handlers for all browsers
 				script.onload = script.onreadystatechange = function( _, isAbort ) {
@@ -9861,7 +9861,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 	var callbackName, overwritten, responseContainer,
 		jsonProp = s.jsonp !== false && ( rjsonp.test( s.url ) ?
-			"url" :
+			"urls.py" :
 			typeof s.data === "string" && !( s.contentType || "" ).indexOf("application/x-www-form-urlencoded") && rjsonp.test( s.data ) && "data"
 		);
 

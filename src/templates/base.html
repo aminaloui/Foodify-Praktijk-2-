@@ -7,14 +7,42 @@
         .content {
             width: 800px;
             margin: 0 auto;
+            clear: both;
         }
+        .main-nav{
+            width: 800px;
+            margin: 10px auto;
+
+        }
+        .main-nav{
+             display: inline;
+        }
+
+        .pull-right{
+            float: right;
+        }
+        .pull-left{
+            float: left;
+        }
+
 
         {% block style %}  {% endblock style %}
 </style>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<nav class="main-nav">
+    <ul class="pull-left">
+        <li><a href="#"> Foodify</a></li>
+    </ul>
+
+    <ul class="pull-right">
+        <li><a href="#"> Foods</a></li>
+        <li><a href="#"> Tags</a></li>
+        <li><a href="#"> Cart</a></li>
+    </ul>
+
+</nav>
 <div class="content">
 {% block content %}
 {% endblock content %}

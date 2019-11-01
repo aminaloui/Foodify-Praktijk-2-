@@ -10,7 +10,10 @@ from .forms import FoodAddForm, FoodModelForm
 from .models import Food
 
 
-class FoodCreateView(CreateView):
+from foodify.mixins import MultiSlugMixin, LoginRequiredMixin
+
+
+class FoodCreateView(CreateView, MultiSlugMixin, LoginRequiredMixin):
     model = Food
     template_name = "form.html"
     form_class = FoodModelForm
@@ -29,7 +32,7 @@ class FoodCreateView(CreateView):
         return valid_data
 
 
-class FoodUpdateView(UpdateView):
+class FoodUpdateView(UpdateView, MultiSlugMixin,):
     model = Food
     template_name = "form.html"
     form_class = FoodModelForm
@@ -48,33 +51,33 @@ class FoodUpdateView(UpdateView):
         else:
             raise Http404
 
-
-# Mixins
-
-class LoginRequiredMixin(object):
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
-
-
-class MultiSlugMixin(object):
-    model = None
-
-    def get_object(self, *args, **kwargs):
-        slug = self.kwargs.get("slug")
-        modelClass = self.model
-        if slug is not None:
-            try:
-                obj = get_object_or_404(Food, slug=slug)
-            except modelClass.MultipleObjectsReturned:
-                obj = modelClass.objects.filter(slug=slug).order_by("-title").first()
-        else:
-            obj = super(MultiSlugMixin, *args, **kwargs)
-        return obj
-
-
 #
+# # Mixins
+#
+# class LoginRequiredMixin(object):
+#
+#     @method_decorator(login_required)
+#     def dispatch(self, request, *args, **kwargs):
+#         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
+#
+#
+# class MultiSlugMixin(object):
+#     model = None
+#
+#     def get_object(self, *args, **kwargs):
+#         slug = self.kwargs.get("slug")
+#         modelClass = self.model
+#         if slug is not None:
+#             try:
+#                 obj = get_object_or_404(Food, slug=slug)
+#             except modelClass.MultipleObjectsReturned:
+#                 obj = modelClass.objects.filter(slug=slug).order_by("-title").first()
+#         else:
+#             obj = super(MultiSlugMixin, *args, **kwargs)
+#         return obj
+#
+#
+# #
 
 
 class FoodDetailView(MultiSlugMixin, DetailView):
